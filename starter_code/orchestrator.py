@@ -24,12 +24,10 @@ def run_pipeline():
         with open(file_path, 'r') as f:
             raw_data = json.load(f)
         
-        # TODO: Gọi hàm xử lý PDF (process_pdf_data)
-        processed = process_pdf_data(raw_data)
+        # TODO: Bước 1: Gọi hàm xử lý PDF (process_pdf_data)
         
-        # TODO: Kiểm tra chất lượng (run_semantic_checks). Nếu đạt (True) thì thêm vào final_kb
-        if run_semantic_checks(processed):
-            final_kb.append(processed)
+        # TODO: Bước 2: Kiểm tra chất lượng (run_semantic_checks). 
+        # Nếu đạt (True) thì thêm vào list final_kb
 
     # Xử lý Group B (Videos)
     video_files = glob.glob(os.path.join(RAW_DATA_DIR, "group_b_videos", "*.json"))
@@ -38,9 +36,6 @@ def run_pipeline():
             raw_data = json.load(f)
         
         # TODO: Làm tương tự như phần PDF (gọi hàm xử lý Video và kiểm tra chất lượng)
-        processed = process_video_data(raw_data)
-        if run_semantic_checks(processed):
-            final_kb.append(processed)
 
     # Lưu kết quả
     with open(OUTPUT_FILE, 'w') as f:

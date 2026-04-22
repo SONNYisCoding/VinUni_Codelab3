@@ -102,3 +102,63 @@ def test_final_output_structure():
         if len(data) > 0:
             # Kiểm tra bản ghi đầu tiên có đúng schema không
             UnifiedDocument(**data[0])
+
+def calculate_grade():
+    print("\n" + "="*50)
+    print("AUTOMATED GRADING SUITE")
+    print("="*50)
+    
+    score = 0
+    results = {}
+
+    # Criteria 1: Execution (40 Points)
+    try:
+        test_execution_pdf_parsing()
+        test_execution_video_parsing()
+        results["Execution"] = (40, "PASSED")
+        score += 40
+    except Exception as e:
+        results["Execution"] = (40, f"FAILED")
+
+    # Criteria 2: Observability (20 Points)
+    try:
+        test_observability_catch_toxic()
+        test_observability_catch_short_content()
+        results["Observability"] = (20, "PASSED")
+        score += 20
+    except Exception as e:
+        results["Observability"] = (20, f"FAILED")
+
+    # Criteria 3: Harmonization (30 Points)
+    try:
+        test_harmonization_schema_conformity()
+        results["Harmonization"] = (30, "PASSED")
+        score += 30
+    except Exception as e:
+        results["Harmonization"] = (30, f"FAILED")
+
+    # Criteria 4: Final Result (10 Points)
+    # Force fail if all other core logic failed
+    all_core_failed = all(results[k][1] == "FAILED" for k in ["Execution", "Observability", "Harmonization"])
+    
+    try:
+        if all_core_failed:
+            raise Exception("Final result is not accepted since the core logic failed.")
+        test_final_output_structure()
+        results["Final Result"] = (10, "PASSED")
+        score += 10
+    except Exception as e:
+        results["Final Result"] = (10, f"FAILED")
+
+    print(f"\n{'Criteria':<20} | {'Points':<7} | {'Status'}")
+    print("-" * 50)
+    for crit in ["Execution", "Observability", "Harmonization", "Final Result"]:
+        pts, res = results[crit]
+        print(f"{crit:<20} | {pts:<7} | {res}")
+    
+    print("-" * 50)
+    print(f"TOTAL SCORE: {score}/100")
+    print("="*50 + "\n")
+
+if __name__ == "__main__":
+    calculate_grade()
